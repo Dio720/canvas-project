@@ -9,7 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 #=== SETTING VARIABLES ===#
 # Appending to existing flags the correct way (two methods)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -g3")
 # string(APPEND CMAKE_CXX_FLAGS " -Wall -Werror")
 
 
@@ -22,9 +22,9 @@ add_subdirectory(ext_lib) # This will ask this lib to be build
 
 set ( APP_NAME "canvas")
 # Specifies include directories to use when compiling a given target.
+add_executable( ${APP_NAME} src/canvas.cpp src/driver_canvas.cpp )
 target_include_directories( ${APP_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src )
 target_include_directories( ${APP_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/ext_lib )
-add_executable( ${APP_NAME} src/canvas.cpp src/driver_canvas.cpp )
 target_include_directories( ${APP_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/ext_lib )
 target_compile_features( ${APP_NAME}  PUBLIC cxx_std_17 )
 target_link_libraries( ${APP_NAME} PRIVATE ${EXT_LIB})

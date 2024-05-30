@@ -28,51 +28,64 @@ namespace life {
  * PNG image file.
  */
 class Canvas {
-public:
-  //== Alias
-  using component_t = uint8_t;    //!< Type of a color channel.
-  using coord_t = unsigned long;  //!< The pixel coordinate type.
-  //== Constants
-  static constexpr uint8_t image_depth = 4;  //!< Default value is RGBA (4 channels).
+  public:
+    //== Alias
+    using component_t = uint8_t;    //!< Type of a color channel.
+    using coord_t = unsigned long;  //!< The pixel coordinate type.
+    //== Constants
+    static constexpr uint8_t image_depth = 4;  //!< Default value is RGBA (4 channels).
 
-  //=== Special members
-  /// Constructor
-  /*! Creates an empty canvas with the requested dimensions.
-   * @param w The canvas width in virtual pixels.
-   * @param h The canvas height in virtual pixels.
-   * @param bs The canvas block size in real pixels.
-   */
-  Canvas(size_t w = 0, size_t h = 0, short bs = 4);
-  /// Destructor.
-  virtual ~Canvas() = default;
+    //=== Special members
+    /// Constructor
+    /*! Creates an empty canvas with the requested dimensions.
+     * @param w The canvas width in virtual pixels.
+     * @param h The canvas height in virtual pixels.
+     * @param bs The canvas block size in real pixels.
+     */
+    Canvas(size_t w = 0, size_t h = 0, short bs = 4) : m_width(w), m_height(h), m_block_size(bs) {
+        m_pixels.reserve(height() * width() * 4);
+    }
+    /// Destructor.
+    virtual ~Canvas() = default;
 
-  //=== Special members
-  /// Copy constructor.
-  Canvas(const Canvas&);
-  /// Assignment operator.
-  Canvas& operator=(const Canvas&);
+    //=== Special members
+    /// Copy constructor.
+    Canvas(const Canvas&);
+    /// Assignment operator.
+    Canvas& operator=(const Canvas&);
 
-  //=== Members
-  /// Clear the canvas with black color.
-  void clear(const Color& = BLACK);
-  /// Set the color of a pixel on the canvas.
-  void pixel(coord_t, coord_t, const Color&);
-  /// Get the pixel color from the canvas.
-  [[nodiscard]] Color pixel(coord_t, coord_t) const;
+    //=== Members
+    /// Clear the canvas with black color.
+    void clear(const Color& = BLACK);
+    /// Set the color of a pixel on the canvas.
+    void pixel(coord_t, coord_t, const Color&);
+    /// Get the pixel color from the canvas.
+    [[nodiscard]] Color pixel(coord_t, coord_t) const;
 
-  //=== Attribute accessors members.
-  /// Get the canvas width.
-  [[nodiscard]] size_t width() const { return m_width; }
-  /// Get the canvas height.
-  [[nodiscard]] size_t height() const { return m_height; }
-  /// Get the canvas pixels, as an array of `unsigned char`.
-  [[nodiscard]] const component_t* pixels() const { return m_pixels.data(); }
+    //=== Attribute accessors members.
+    /// Get the canvas width.
+    [[nodiscard]] size_t width() const { return m_width; }
+    /// Get the canvas height.
+    [[nodiscard]] size_t height() const { return m_height; }
+    /// Get the canvas pixels, as an array of `unsigned char`.
+    [[nodiscard]] const component_t* pixels() const { return m_pixels.data(); }
+    /// Given a coordinate, it tells if it's in bounds of m_pixels
+    [[nodiscard]] const bool in_bounds(coord_t x, coord_t y) const {
+        return x < m_width and y < m_height;
+    }
+    /// Given a coordinate it returns every channel of the pixel
+    constexpr std::array<component_t, 4> pixel_channels(coord_t x, coord_t y) const {
+        return { m_pixels[(y * m_width + x) * 4],
+                 m_pixels[(y * m_width + x) * 4 + 1],
+                 m_pixels[(y * m_width + x) * 4 + 2],
+                 m_pixels[(y * m_width + x) * 4 + 3] };
+    }
 
-private:
-  size_t m_width;                //!< The image width in pixel units.
-  size_t m_height;               //!< The image height in pixel units.
-  short m_block_size;            //!< Cell size in pixels
-  vector<component_t> m_pixels;  //!< The pixels, stored as 3 RGB components.
+  private:
+    size_t m_width;                //!< The image width in pixel units.
+    size_t m_height;               //!< The image height in pixel units.
+    short m_block_size;            //!< Cell size in pixels
+    vector<component_t> m_pixels;  //!< The pixels, stored as 3 RGB components.
 };
 }  // namespace life
 

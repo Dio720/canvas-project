@@ -9,40 +9,44 @@
 namespace life {
 /// Represents a Color as a RGB entity.
 struct Color {
-  //=== Alias
-  using color_t = unsigned char;  //!< Type of a color channel.
-  /// Identifies each color channel.
-  enum channel_e : color_t {
-    R = 0,  //!< Red channel.
-    G = 1,  //!< Green channel.
-    B = 2   //!< Blue channel
-  };
+    //=== Alias
+    using color_t = unsigned char;  //!< Type of a color channel.
+    /// Identifies each color channel.
+    enum channel_e : color_t {
+        R = 0,  //!< Red channel.
+        G = 1,  //!< Green channel.
+        B = 2   //!< Blue channel
+    };
 
-  //=== Members
-  std::array<color_t, 3> channels{ 0, 0, 0 };  //!< Stores each of the color channels, R, G, and B.
-  //=== Methods
-  /// Creates a color.
-  Color(color_t r = 0, color_t g = 0, color_t b = 0) : channels{ r, g, b } { /*empty*/ }
-  /// Copy constructor.
-  Color(const Color& clone) { channels = clone.channels; }
-  /// Assignment operator.
-  Color& operator=(const Color& rhs) {
-    if (&rhs != this) {
-      channels = rhs.channels;
+    //=== Members
+    std::array<color_t, 3> channels{ 0,
+                                     0,
+                                     0 };  //!< Stores each of the color channels, R, G, and B.
+    //=== Methods
+    /// Creates a color.
+    Color(color_t r = 0, color_t g = 0, color_t b = 0) : channels{ r, g, b } { /*empty*/ }
+    /// Copy constructor.
+    Color(const Color& clone) { channels = clone.channels; }
+    /// Assignment operator.
+    Color& operator=(const Color& rhs) {
+        if (&rhs != this) {
+            channels = rhs.channels;
+        }
+        return *this;
     }
-    return *this;
-  }
-  /// Comparison operator.
-  bool operator==(const Color& rhs) {
-    // TODO
-    return false;  // this a stub, replace it.
-  }
-  /// Prints out a string representation of a color to an output stream.
-  friend std::ostream& operator<<(std::ostream& os, const Color& c) {
-    os << "(" << (int)c.channels[0] << "," << (int)c.channels[1] << "," << (int)c.channels[2]
-       << ")";
-    return os;
-  }
+    /// Comparison operator.
+    bool operator==(const Color& rhs) {
+        for (size_t i{ 0 }; i < channels.size(); ++i)
+            if (rhs.channels[i] != channels[i])
+                return false;
+        return true;
+    }
+    /// Prints out a string representation of a color to an output stream.
+    friend std::ostream& operator<<(std::ostream& os, const Color& c) {
+        os << "(" << (int)c.channels[0] << "," << (int)c.channels[1] << "," << (int)c.channels[2]
+           << ")";
+        return os;
+    }
 };
 
 // A basic color pallete.
