@@ -33,7 +33,7 @@ class Canvas {
     using component_t = uint8_t;    //!< Type of a color channel.
     using coord_t = unsigned long;  //!< The pixel coordinate type.
     //== Constants
-    static constexpr uint8_t image_depth = 4;  //!< Default value is RGBA (4 channels).
+    static constexpr uint8_t image_depth = 3;  //!< Default value is RGBA (4 channels).
 
     //=== Special members
     /// Constructor
@@ -91,7 +91,7 @@ class Canvas {
         return { m_pixels[(real_y * m_width + real_x) * image_depth],
                  m_pixels[(real_y * m_width + real_x) * image_depth + 1],
                  m_pixels[(real_y * m_width + real_x) * image_depth + 2],
-                 m_pixels[(real_y * m_width + real_x) * image_depth + 3] };
+                 /* m_pixels[(real_y * m_width + real_x) * image_depth + 3] */ };
     }
 
   private:

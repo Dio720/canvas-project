@@ -66,8 +66,8 @@ void Canvas::pixel(coord_t x, coord_t y, const Color& c) {
               = c.channels[Color::G];
             m_pixels[(current_y * m_width + current_x) * Canvas::image_depth + Color::B]
               = c.channels[Color::B];
-            m_pixels[(current_y * m_width + current_x) * Canvas::image_depth + 3]
-              = 255;  //!< Setting alpha to full opacity
+            // m_pixels[(current_y * m_width + current_x) * Canvas::image_depth + 3]
+            //   = 255;  //!< Setting alpha to full opacity
         }
 }
 }  // namespace life

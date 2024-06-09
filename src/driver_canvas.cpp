@@ -45,7 +45,7 @@ void encode_png(const char* filename, const unsigned char* image, unsigned width
 // without warning!
 int main(int argc, char* argv[]) {
     // NOTE: this sample will overwrite the file or test.png without warning!
-    const char* filename = argc > 1 ? argv[1] : "test.png";
+    const char* filename = argc > 1 ? argv[1] : "test.ppm";
 
     // Test parameters: generate some image
     unsigned width = 20;
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
     std::cout << ">>> Gravando imagem '" << filename << "', dimensions: " << width << " x "
               << height << " (bs = " << block_size << "), please wait...\n";
 
-    encode_png(filename, image.pixels(), image.real_width(), image.real_height());
-    save_ppm3(image.pixels(), image.real_width(), image.real_height(), 4, "test.ppm");
+    // encode_png(filename, image.pixels(), image.real_width(), image.real_height());
+    save_ppm3(image.pixels(), image.real_width(), image.real_height(), 3, "test.ppm");
     std::cout << "<<< done!\n";
 }
