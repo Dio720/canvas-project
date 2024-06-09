@@ -20,7 +20,14 @@ bool save_ppm3(const unsigned char* data,
     }
 
     // TODO: Complete a geração do arquivo PPM!!
+<<<<<<< Updated upstream
 
+=======
+    ofs_file << 'P' << d << '\n' << w << ' ' << h << "\n255\n";
+    for (size_t i{ 0 }; i < w * h * d; ++i) {
+        ofs_file << (int)data[i] << ' ';
+    }
+>>>>>>> Stashed changes
     ofs_file.close();
 
     return true;  // stub
@@ -46,25 +53,25 @@ int main(int argc, char* argv[]) {
     const char* filename = argc > 1 ? argv[1] : "test.png";
 
     // Test parameters: generate some image
-    unsigned width = 1000;
-    unsigned height = 750;
+    unsigned width = 20;
+    unsigned height = 15;
     short block_size = 50;
 
     // Criar uma imagem para desenho.
     Canvas image(width, height, block_size);
 
     // Preenche os pixels da imagem com um tabuleiro.
-    for (auto x{ 0U }; x < width; x += block_size) {
-        for (auto y{ 0U }; y < height; y += block_size) {
-            if ((y / block_size % 2) != 0U) {
-                if ((x / block_size % 2) == 0U) {
+    for (auto x{ 0U }; x < width; ++x) {
+        for (auto y{ 0U }; y < height; ++y) {
+            if ((y % 2) != 0U) {
+                if ((x % 2) == 0U) {
                     // another way to define a color.
                     image.pixel(x, y, color_pallet["deep_sky_blue"]);
                     // image.pixel( x,y , DEEP_SKY_BLUE );
                 } else {
                     image.pixel(x, y, RED);
                 }
-            } else if ((x / block_size % 2) == 0U) {
+            } else if ((x % 2) == 0U) {
                 image.pixel(x, y, RED);
             } else {
                 image.pixel(x, y, DEEP_SKY_BLUE);
@@ -76,7 +83,7 @@ int main(int argc, char* argv[]) {
     std::cout << ">>> Gravando imagem '" << filename << "', dimensions: " << width << " x "
               << height << " (bs = " << block_size << "), please wait...\n";
 
-    encode_png(filename, image.pixels(), image.width(), image.height());
-    save_ppm3(image.pixels(), image.width(), image.height(), 4, "test.ppm");
+    encode_png(filename, image.pixels(), image.real_width(), image.real_height());
+    save_ppm3(image.pixels(), image.real_width(), image.real_height(), 4, "test.ppm");
     std::cout << "<<< done!\n";
 }

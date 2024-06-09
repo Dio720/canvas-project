@@ -33,7 +33,7 @@ class Canvas {
     using component_t = uint8_t;    //!< Type of a color channel.
     using coord_t = unsigned long;  //!< The pixel coordinate type.
     //== Constants
-    static constexpr uint8_t image_depth = 4;  //!< Default value is RGBA (4 channels).
+    static constexpr uint8_t image_depth = 4;  //!< Default value is RGB (3 channels).
 
     //=== Special members
     /// Constructor
@@ -42,8 +42,9 @@ class Canvas {
      * @param h The canvas height in virtual pixels.
      * @param bs The canvas block size in real pixels.
      */
-    Canvas(size_t w = 0, size_t h = 0, short bs = 4) : m_width(w), m_height(h), m_block_size(bs) {
-        m_pixels.reserve(height() * width() * 4);
+    Canvas(size_t w = 0, size_t h = 0, short bs = 4)
+        : m_width(w * bs), m_height(h * bs), m_block_size(bs) {
+        m_pixels.resize(m_height * m_width * image_depth);
     }
     /// Destructor.
     virtual ~Canvas() = default;
@@ -63,22 +64,34 @@ class Canvas {
     [[nodiscard]] Color pixel(coord_t, coord_t) const;
 
     //=== Attribute accessors members.
-    /// Get the canvas width.
-    [[nodiscard]] size_t width() const { return m_width; }
-    /// Get the canvas height.
-    [[nodiscard]] size_t height() const { return m_height; }
+    /// Get the canvas width in virtual pixels.
+    [[nodiscard]] size_t width() const { return m_width / m_block_size; }
+    /// Get the canvas height in virtual pixels.
+    [[nodiscard]] size_t height() const { return m_height / m_block_size; }
+    /// Get the canvas width in pixels
+    [[nodiscard]] size_t real_width() const { return m_width; }
+    /// Get the canvas width in pixels
+    [[nodiscard]] size_t real_height() const { return m_height; }
     /// Get the canvas pixels, as an array of `unsigned char`.
     [[nodiscard]] const component_t* pixels() const { return m_pixels.data(); }
-    /// Given a coordinate, it tells if it's in bounds of m_pixels
-    [[nodiscard]] const bool in_bounds(coord_t x, coord_t y) const {
-        return x < m_width and y < m_height;
+    /// Given a (virtual) coordinate, it tells if it's in bounds of m_pixels
+    [[nodiscard]] constexpr bool in_bounds(coord_t x, coord_t y) const {
+        return x < width() and y < height();
+    }
+    [[nodiscard]] constexpr bool in_real_bounds(coord_t r_x, coord_t r_y) const {
+        return r_x < m_width and r_y < m_height;
+    }
+    /// Virtual to real coordinate
+    [[nodiscard]] constexpr std::pair<size_t, size_t> virtual_to_real(coord_t x, coord_t y) const {
+        return { x * m_block_size, y * m_block_size };
     }
     /// Given a coordinate it returns every channel of the pixel
-    constexpr std::array<component_t, 4> pixel_channels(coord_t x, coord_t y) const {
-        return { m_pixels[(y * m_width + x) * 4],
-                 m_pixels[(y * m_width + x) * 4 + 1],
-                 m_pixels[(y * m_width + x) * 4 + 2],
-                 m_pixels[(y * m_width + x) * 4 + 3] };
+    constexpr std::array<component_t, image_depth> pixel_channels(coord_t x, coord_t y) const {
+        auto [real_x, real_y] = virtual_to_real(x, y);
+        return { m_pixels[(real_y * m_width + real_x) * image_depth],
+                 m_pixels[(real_y * m_width + real_x) * image_depth + 1],
+                 m_pixels[(real_y * m_width + real_x) * image_depth + 2],
+                 m_pixels[(real_y * m_width + real_x) * image_depth + 3] };
     }
 
   private:
