@@ -53,19 +53,6 @@ Color Canvas::pixel(coord_t x, coord_t y) const {
 void Canvas::pixel(coord_t x, coord_t y, const Color& c) {
     if (not in_bounds(x, y))
         return;
-<<<<<<< Updated upstream
-    for (int i = 0; i < m_block_size; i++) {
-        for (int j = 0; j < m_block_size; j++) {
-            if (in_bounds(x + i, y + j)) {
-                m_pixels[((y + j) * m_width + (x + i)) * 4 + Color::R] = c.channels[Color::R];
-                m_pixels[((y + j) * m_width + (x + i)) * 4 + Color::G] = c.channels[Color::G];
-                m_pixels[((y + j) * m_width + (x + i)) * 4 + Color::B] = c.channels[Color::B];
-                m_pixels[((y + j) * m_width + (x + i)) * 4 + 3]
-                  = 255;  //!< Setting alpha to full opacity
-            }
-        }
-    }
-=======
     auto [real_x, real_y] = virtual_to_real(x, y);
     for (int i = 0; i < m_block_size; i++)
         for (int j = 0; j < m_block_size; j++) {
@@ -82,7 +69,6 @@ void Canvas::pixel(coord_t x, coord_t y, const Color& c) {
             m_pixels[(current_y * m_width + current_x) * Canvas::image_depth + 3]
               = 255;  //!< Setting alpha to full opacity
         }
->>>>>>> Stashed changes
 }
 }  // namespace life
 //================================[ canvas.cpp ]================================//

@@ -19,15 +19,10 @@ bool save_ppm3(const unsigned char* data,
         return false;
     }
 
-    // TODO: Complete a geração do arquivo PPM!!
-<<<<<<< Updated upstream
-
-=======
     ofs_file << 'P' << d << '\n' << w << ' ' << h << "\n255\n";
     for (size_t i{ 0 }; i < w * h * d; ++i) {
         ofs_file << (int)data[i] << ' ';
     }
->>>>>>> Stashed changes
     ofs_file.close();
 
     return true;  // stub

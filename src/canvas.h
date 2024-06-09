@@ -33,7 +33,7 @@ class Canvas {
     using component_t = uint8_t;    //!< Type of a color channel.
     using coord_t = unsigned long;  //!< The pixel coordinate type.
     //== Constants
-    static constexpr uint8_t image_depth = 4;  //!< Default value is RGB (3 channels).
+    static constexpr uint8_t image_depth = 4;  //!< Default value is RGBA (4 channels).
 
     //=== Special members
     /// Constructor
